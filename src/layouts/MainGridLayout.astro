@@ -80,12 +80,29 @@ const getBannerImages = async () => {
 			desktop?: string | string[];
 			mobile?: string | string[];
 		};
+		// 修复：检查数组是否为空，如果为空返回 null
+		const desktop = Array.isArray(srcObj.desktop) 
+			? (srcObj.desktop.length > 0 ? srcObj.desktop : null)
+			: (srcObj.desktop || null);
+		const mobile = Array.isArray(srcObj.mobile)
+			? (srcObj.mobile.length > 0 ? srcObj.mobile : null)
+			: (srcObj.mobile || null);
+		
+		// 如果两个都为空，返回 null
+		if (!desktop && !mobile) {
+			return { desktop: null, mobile: null };
+		}
+		
 		return {
-			desktop: srcObj.desktop || srcObj.mobile || "",
-			mobile: srcObj.mobile || srcObj.desktop || "",
+			desktop: desktop || mobile || null,
+			mobile: mobile || desktop || null,
 		};
 	}
 	// 如果是字符串或字符串数组，同时用于桌面端和移动端
+	// 修复：检查数组是否为空
+	if (Array.isArray(bannerSrc) && bannerSrc.length === 0) {
+		return { desktop: null, mobile: null };
+	}
 	return {
 		desktop: bannerSrc,
 		mobile: bannerSrc,
@@ -573,20 +590,28 @@ const transparentClass = shouldEnableTransparency
         <!-- Single image mode -->
             <div class="relative h-full w-full">
                 <!-- Mobile: use mobile-specific image with same logic as desktop -->
-                <ImageWrapper 
-                    alt="Mobile banner image of the blog" 
-                    class:list={["block lg:hidden object-cover h-full w-full transition duration-700 opacity-100"]}
-                    src={(Array.isArray(bannerImages.mobile) ? bannerImages.mobile[0] : (typeof bannerImages.mobile === 'string' ? bannerImages.mobile : '')) || (Array.isArray(bannerImages.desktop) ? bannerImages.desktop[0] : (typeof bannerImages.desktop === 'string' ? bannerImages.desktop : '')) || ''} 
-                    position={siteConfig.banner.position}
-                />
-                <!-- Desktop: use desktop-specific image -->
-                <ImageWrapper 
-                    id="banner" 
-                    alt="Desktop banner image of the blog" 
-                    class:list={["hidden lg:block object-cover h-full transition duration-700 opacity-100"]}
-                    src={(Array.isArray(bannerImages.desktop) ? bannerImages.desktop[0] : (typeof bannerImages.desktop === 'string' ? bannerImages.desktop : '')) || (Array.isArray(bannerImages.mobile) ? bannerImages.mobile[0] : (typeof bannerImages.mobile === 'string' ? bannerImages.mobile : '')) || ''} 
-                    position={siteConfig.banner.position}
-                />
+                {(bannerImages.mobile || bannerImages.desktop) && (
+                    <>
+                        {bannerImages.mobile && (
+                            <ImageWrapper 
+                                alt="Mobile banner image of the blog" 
+                                class:list={["block lg:hidden object-cover h-full w-full transition duration-700 opacity-100"]}
+                                src={Array.isArray(bannerImages.mobile) ? bannerImages.mobile[0] : bannerImages.mobile} 
+                                position={siteConfig.banner.position}
+                            />
+                        )}
+                        <!-- Desktop: use desktop-specific image -->
+                        {bannerImages.desktop && (
+                            <ImageWrapper 
+                                id="banner" 
+                                alt="Desktop banner image of the blog" 
+                                class:list={["hidden lg:block object-cover h-full transition duration-700 opacity-100"]}
+                                src={Array.isArray(bannerImages.desktop) ? bannerImages.desktop[0] : bannerImages.desktop} 
+                                position={siteConfig.banner.position}
+                            />
+                        )}
+                    </>
+                )}
             </div>
     )}
     

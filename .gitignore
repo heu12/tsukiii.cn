@@ -14,15 +14,8 @@ pnpm-debug.log*
 .env
 .env.production
 
-# content repository (independent mode)
-/content/
-*.backup
-
 # Large zip files
 *.zip
-
-# macOS-specific files
-.DS_Store
 
 .vercel
 
@@ -33,8 +26,13 @@ yarn.lock
 # ide
 .idea
 *.iml
+.vscode
 
 cache/
 fuwari/
 src/data/myself.ts
 src/pages/myself.astro
+
+DEPLOY.bat
+BUILD.bat
+DEV.bat

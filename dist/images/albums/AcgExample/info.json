@@ -1,10 +1,10 @@
 {
-	"title": "Some lovely pictures",
+	"title": "一些好看的图片",
 	"hidden": false,
 	"description": "The world is vast, and you have to go explore it.",
-	"date": "2025-08-01",
-	"location": "Bilibili",
-	"tags": ["Kawai", "Cute", "Moe"],
+	"date": "2025-11-20",
+	"location": "上海",
+	"tags": ["Nahida", "miHoYo", "ACG"],
 	"layout": "masonry",
 	"columns": 3
 }
