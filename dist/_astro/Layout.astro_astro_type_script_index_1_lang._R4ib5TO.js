@@ -10,7 +10,7 @@ class h{constructor(){this.visibleBlocks=new Set,this.pendingThemeUpdate=null,th
         opacity: 1 !important;
       }`,this.tempStyleSheet.textContent=t)}}initCodeBlockOptimization(){this.codeBlockObserver=new IntersectionObserver(t=>{t.forEach(e=>{e.isIntersecting?(this.visibleBlocks.add(e.target),this.pendingThemeUpdate&&this.applyThemeToBlock(e.target,this.pendingThemeUpdate)):this.visibleBlocks.delete(e.target)})},{rootMargin:"50px 0px",threshold:.01}),this.observeCodeBlocks(),this.setupThemeListener(),window.swup&&window.swup.hooks.on("page:view",()=>{setTimeout(()=>this.observeCodeBlocks(),100)})}observeCodeBlocks(){this.visibleBlocks.clear(),requestAnimationFrame(()=>{document.querySelectorAll(".expressive-code").forEach(e=>{this.codeBlockObserver.observe(e),this.hideCodeBlocksDuringTransition?e.classList.add("hide-during-transition"):e.classList.remove("hide-during-transition")})})}setupThemeListener(){new MutationObserver(e=>{for(const i of e)if(i.type==="attributes"&&i.attributeName==="data-theme"){const s=document.documentElement.getAttribute("data-theme");this.handleThemeChange(s);break}}).observe(document.documentElement,{attributes:!0,attributeFilter:["data-theme"]})}handleThemeChange(t){this.pendingThemeUpdate=t;const e=Array.from(this.visibleBlocks);e.length!==0&&this.batchUpdateBlocks(e,t)}batchUpdateBlocks(t,e){let s=0;const n=()=>{const o=t.slice(s,s+3);requestAnimationFrame(()=>{o.forEach(r=>{this.applyThemeToBlock(r,e)}),s+=3,s<t.length&&setTimeout(n,0)})};n()}applyThemeToBlock(t,e){t.dataset.themeUpdated=e}interceptThemeSwitch(){new MutationObserver(e=>{for(const i of e)if(i.type==="attributes"&&i.attributeName==="class"&&i.target===document.documentElement){const s=document.documentElement.classList,n=s.contains("is-theme-transitioning"),o=s.contains("use-view-transition");n&&!this.isOptimizing?this.optimizeThemeSwitch(o):!n&&this.isOptimizing&&this.restoreAfterThemeSwitch(o)}}).observe(document.documentElement,{attributes:!0,attributeFilter:["class"]})}optimizeThemeSwitch(t=!1){this.isOptimizing=!0,this.useViewTransition=t,!t&&(this.disableHeavyAnimations(),this.hideOffscreenHeavyElements(),this.forceCompositing())}disableHeavyAnimations(){this.tempStyleSheet||(this.tempStyleSheet=document.createElement("style"),this.tempStyleSheet.id="theme-optimizer-temp",document.head.appendChild(this.tempStyleSheet)),this.tempStyleSheet.textContent=`
       /* 临时禁用重型元素的过渡和动画 */
-      .is-theme-transitioning .float-panel,
+      .is-theme-transitioning .float-panel:not(.float-panel-closed),
       .is-theme-transitioning .music-player,
       .is-theme-transitioning .widget,
       .is-theme-transitioning .post-card,
@@ -48,6 +48,11 @@ class h{constructor(){this.visibleBlocks=new Set,this.pendingThemeUpdate=null,th
         /* 保持代码块可见，但禁用过渡效果 */
         content-visibility: visible !important;
         opacity: 1 !important;
+      }
+      
+      /* 确保打开的TOC面板在主题切换期间保持可点击 */
+      .is-theme-transitioning .float-panel:not(.float-panel-closed) {
+        pointer-events: auto !important;
       }
     `}hideOffscreenHeavyElements(){const t=window.innerHeight,e=window.scrollY;this.hiddenElements=[],this.heavySelectors.forEach(i=>{document.querySelectorAll(i).forEach(n=>{const o=n.getBoundingClientRect(),r=o.top+e;if(r+o.height<e-200||r>e+t+200){const a=n.style.contentVisibility;n.style.contentVisibility="hidden",this.hiddenElements.push({element:n,originalVisibility:a})}})})}forceCompositing(){const t=document.querySelectorAll(`
       .expressive-code,

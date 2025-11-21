@@ -55,7 +55,7 @@ export const siteConfig: SiteConfig = {
 	},
 
 	bangumi: {
-		userId: "sai", // 在此处设置你的Bangumi用户ID，可以设置为 "sai" 测试
+		userId: "your-bangumi-id", // 在此处设置你的Bangumi用户ID，可以设置为 "sai" 测试
 	},
 
 	anime: {
@@ -74,7 +74,7 @@ export const siteConfig: SiteConfig = {
 	// 标签样式配置
 	tagStyle: {
 		// 是否使用新样式（悬停高亮样式）还是旧样式（外框常亮样式）
-		useNewStyle: true,
+		useNewStyle: false,
 	},
 
 	// 壁纸模式配置
@@ -123,7 +123,6 @@ export const siteConfig: SiteConfig = {
 			enable: false, // 在主页显示自定义文本
 			title: "", // 主页横幅主标题
 
-			// 横幅副标题轮播
 			subtitle: [],
 			typewriter: {
 				enable: true, // 启用副标题打字机效果
@@ -147,17 +146,17 @@ export const siteConfig: SiteConfig = {
 	},
 	toc: {
 		enable: true, // 启用目录功能
-		depth: 3, // 目录深度，1-6，1 表示只显示 h1 标题，2 表示显示 h1 和 h2 标题，依此类推
+		depth: 2, // 目录深度，1-6，1 表示只显示 h1 标题，2 表示显示 h1 和 h2 标题，依此类推
 		useJapaneseBadge: false, // 使用日语假名标记（あいうえお...）代替数字，开启后会将 1、2、3... 改为 あ、い、う...
 	},
 	generateOgImages: false, // 启用生成OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
 	favicon: [
 		// 留空以使用默认 favicon
 		{
-			src: "/favicon/icon.png", // 图标文件路径
-			// theme: "light", // 可选，指定主题 'light' | 'dark'
-			// sizes: "32x32", // 可选，图标大小
-		},
+			src: '/favicon/icon.png',    // 图标文件路径
+			// theme: 'light',              // 可选，指定主题 'light' | 'dark'
+			// sizes: '32x32',              // 可选，图标大小
+		}
 	],
 
 	// 字体配置
@@ -170,15 +169,8 @@ export const siteConfig: SiteConfig = {
 			fontFamily: "NanxiXinyuanti-Regular",
 			fontWeight: "400",
 			localFonts: ["南西新圆体.woff2"], // 本地字体文件路径数组
-			enableCompress: true, // 启用字体子集优化，减少字体文件大小
+			enableCompress: false, // 启用字体子集优化，减少字体文件大小
 		},
-		// cjkFont: {
-		// 	// 中日韩字体 - 作为回退字体
-		// 	fontFamily: "NotoSerifSC-ExtraLight",
-		// 	fontWeight: "400",
-		// 	localFonts: ["NotoSerifSC-ExtraLight.ttf"],
-		// 	enableCompress: false, // 启用字体子集优化，减少字体文件大小
-		// },
 	},
 	showLastModified: true, // 控制“上次编辑”卡片显示的开关
 };
@@ -331,13 +323,13 @@ export const commentConfig: CommentConfig = {
 	enable: false, // 启用评论功能。当设置为 false 时，评论组件将不会显示在文章区域。
 	twikoo: {
 		envId: "https://twikoo.vercel.app",
-		lang: "zh-CN", // 设置 Twikoo 评论系统语言为英文
+		lang: "en", // 设置 Twikoo 评论系统语言为英文
 	},
 };
 
 export const announcementConfig: AnnouncementConfig = {
 	title: "公告", // 公告标题
-	content: "网站测试中，敬请期待", // 公告内容
+	content: "网站测试中，敬请期待!", // 公告内容
 	closable: false, // 允许用户关闭公告
 	link: {
 		enable: true, // 启用链接
